@@ -1,6 +1,7 @@
-function [cell_sizes,volumes,binary_orgs] = get_sizes(inputs,cell_bounds,binary_cells,orgs)
-
-    minBounds = 75;
+function [cell_sizes,volumes,binary_orgs] = getSizes2D(cell_bounds,binary_cells,orgs,organelleType)
+    % binary_cells, orgs are all 2D matrices.
+    % organelleType: 'globular' or 'tubular'
+    minBounds = 75; % actually this is a parameter
     numCells = 0;
     for i=1:length(cell_bounds)
         if length(cell_bounds{i}) > minBounds
@@ -12,25 +13,7 @@ function [cell_sizes,volumes,binary_orgs] = get_sizes(inputs,cell_bounds,binary_
     cell_sizes = zeros(1,length(cell_bounds));
     org_sizes = {};
     
-    if contains(inputs{14,1},"all",'IgnoreCase',true) % all frames
-        framerange = [1 str2double(inputs{6})];
-    else
-        [bef,af] = strtok(inputs{14,1},'-');
-        bef_dig = isstrprop(bef,'digit'); af_dig = isstrprop(af,'digit');
-        start = ""; last = "";
-        for d=1:length(bef)
-            if bef_dig(d) == 1
-                start = strcat(start,bef(d));
-            end
-        end
-        for d=1:length(af)
-            if af_dig(d) == 1
-                last = strcat(last,af(d));
-            end
-        end
-        framerange = [str2double(start) str2double(last)];
-    end
-    
+  
     for i=1:length(cell_bounds)
         this_bounds = cell_bounds{i};
         if length(this_bounds) < minBounds
@@ -79,7 +62,7 @@ function [cell_sizes,volumes,binary_orgs] = get_sizes(inputs,cell_bounds,binary_
             
             xmin = min(this_bounds(:,2)); xmax = max(this_bounds(:,2));
             ymin = min(this_bounds(:,1)); ymax = max(this_bounds(:,1));
-            b_cell = zeros(ymax-ymin+1,xmax-xmin+1,framerange(2)-framerange(1)+1);
+            b_cell = zeros(ymax-ymin+1,xmax-xmin+1);
             
 %             maxInCell = 0;
 %             for j=framerange(1):framerange(2)
@@ -96,66 +79,62 @@ function [cell_sizes,volumes,binary_orgs] = get_sizes(inputs,cell_bounds,binary_
 %                 continue
 %             end
             
-            for j=framerange(1):framerange(2)
-                slice_orgs = double(orgs{j});
-                
-                if max(slice_orgs(:)) < 23
-                    continue
-                end
-                
-                this_slice = slice_orgs(ymin:ymax,xmin:xmax);
-                if var(this_slice(:)) < 1
-                    continue
-                end
-                h = histogram(this_slice,20);
-                totalPixels = numel(this_slice);
-                if sum(h.Values(10:20)) >= totalPixels/2.2
-                    continue
-                end
-                if contains(inputs{15,1},"globular",'IgnoreCase',true)
-                    
-               	
-                    filt1 = imgaussfilt(this_slice,2);
-                    [laplace1,~] = laplace(filt1);
-                                
-                    filt2 = imgaussfilt(laplace1,2);
-                    [laplace2,~] = laplace(filt2);
-                    binary_slice = laplace2 > 0.1;
-                
-                elseif contains(inputs{15,1},"tubular",'IgnoreCase',true)
-                    binary_slice = filtMito(this_slice);
-                else
-                    error('incorrect morphology input')
-                end
-                
-                b_cell(:,:,j-framerange(1)+1) = binary_slice;
-            disp('')    
+            slice_orgs = double(orgs{1});
+
+            if max(slice_orgs(:)) < 23
+                continue
             end
+
+            this_slice = slice_orgs(ymin:ymax,xmin:xmax);
+            if var(this_slice(:)) < 1
+                continue
+            end
+            h = histogram(this_slice,20);
+            totalPixels = numel(this_slice);
+            if sum(h.Values(10:20)) >= totalPixels/2.2
+                continue
+            end
+            if contains(organelleType,"globular",'IgnoreCase',true)
+
+
+                filt1 = imgaussfilt(this_slice,2);
+                [laplace1,~] = laplace(filt1);
+
+                filt2 = imgaussfilt(laplace1,2);
+                [laplace2,~] = laplace(filt2);
+                binary_slice = laplace2 > 0.1;
+
+            elseif contains(organelleType,"tubular",'IgnoreCase',true)
+                binary_slice = filtMito(this_slice); % where is this function?
+            else
+                error('incorrect morphology input')
+            end
+
+            b_cell(:,:) = binary_slice;  
+
 %             for r=1:((framerange(2)-framerange(1))+1)
 %                 b_cell(:,:,r) = slice_binaries{r}(ymin:ymax,xmin:xmax);
 %             end
             
-            b_cell = conncompStack(b_cell);
+            % b_cell = conncompStack(b_cell);
             
             isEmpty = 0;
             
-            for j=1:((framerange(2)-framerange(1))+1)
-                thisFrame(:,:) = b_cell(:,:,j);
-                totalObjectPixels = sum(thisFrame(:));
-                
-                clear thisFrame
-                if totalObjectPixels < 15
-                    isEmpty = isEmpty + 1;
-                else
-                    continue
-                end
-                             
+            thisFrame(:,:) = b_cell(:,:);
+            totalObjectPixels = sum(thisFrame(:));
+
+            clear thisFrame
+            if totalObjectPixels < 15
+                isEmpty = isEmpty + 1;
+            else
+                continue
             end
+                             
             if isEmpty > ((framerange(2)-framerange(1)+1)-4)
                 org_sizes{i} = NaN;
                 continue % too many empty frames
             end
-            image_conncomp = bwconncomp(b_cell,6);
+            image_conncomp = bwconncomp(b_cell,4);
             for j=1:image_conncomp.NumObjects
                 this_org = length(image_conncomp.PixelIdxList{j});
                 if (this_org < 25) || (this_org > 1000)
