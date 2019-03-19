@@ -14,7 +14,7 @@ function fileArray = filesInFolder(path, pattern, withSubfolders)
         end
         if withSubfolders % recursion
             for j = 1:length(contents)
-                if contents(j).isdir && not(strcmp(contents(j).name,'.')) && not(strcmp(contents(j).name,'..'))
+                if contents(j).isdir && contents(j).name(1)~='.'
                     fileArray = cat(2,...
                                     fileArray,...
                                     filesInFolder(fullfile(contents(j).folder,...
@@ -37,10 +37,10 @@ function flagImg = isImage(name, pattern)
 end
 
 function [numFolders, numImages] = countContents(folderMember, pattern)
-    numFolders = -2; % There are always '.' and '..'
+    numFolders = 0; % There are always '.' and '..'
     numImages = 0;
     for i=1:length(folderMember)
-        if folderMember(i).isdir
+        if folderMember(i).isdir && folderMember(i).name(1)~='.'
             numFolders = numFolders + 1;
         elseif isImage(folderMember(i).name, pattern)
             numImages = numImages + 1;
