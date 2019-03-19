@@ -105,7 +105,7 @@ function [cell_sizes,volumes,binary_orgs] = getSizes2D(cell_bounds,binary_cells,
                 binary_slice = laplace2 > 0.1;
 
             elseif contains(organelleType,"tubular",'IgnoreCase',true)
-                binary_slice = filtMito(this_slice); % where is this function?
+                binary_slice = filtMito(this_slice); 
             else
                 error('incorrect morphology input')
             end
@@ -116,7 +116,7 @@ function [cell_sizes,volumes,binary_orgs] = getSizes2D(cell_bounds,binary_cells,
 %                 b_cell(:,:,r) = slice_binaries{r}(ymin:ymax,xmin:xmax);
 %             end
             
-            % b_cell = conncompStack(b_cell);
+            b_cell = conncompStack(b_cell);
             
             isEmpty = 0;
             
