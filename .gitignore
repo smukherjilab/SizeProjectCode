@@ -1,0 +1,6 @@
+# ignore all files in the data folder
+/data
+
+# ignore the following file types
+*.fig
+*.png
