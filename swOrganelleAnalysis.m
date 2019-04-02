@@ -5,14 +5,15 @@
 pathIn = 'D:\Documents\Files\denoised\Try11_Leucine75100';
 files = filesInFolder(pathIn,'.tiff',false);
 dataCell = cell(3,1);
-i = 6;
+i = 5;
 imageCell = fileToMatrices( fullfile(files(i).folder, files(i).name) ); % should be 4*1 cell
 cellBoundMatrix = imageCell{4};
-[binary_cells,cell_bounds] = cellSegment(cellBoundMatrix);
-cell_sizes = cell(3,1);
-volumes = cell(3,1);
-binary_orgs = cell(3,1);
+cellLabelMatrix = objBinarize(cellBoundMatrix,15,30,'background');
+cellLabelMatrix = labelmatrix( bwconncomp(cellLabelMatrix) );
 for j =1:3
-    organelleMatrix = imageCell{j};
-    [cell_sizes{j},volumes{j},binary_orgs{j}] = getSizes2D(cell_bounds,binary_cells,{organelleMatrix},'globular');
+    dataCell{j} = organelleInCells(imageCell{j},cellLabelMatrix);
+end
+
+for k = 1:length(dataCell{1,1})
+    dataCell{1,1}{k} = sum(dataCell{1,1}{k});
 end
