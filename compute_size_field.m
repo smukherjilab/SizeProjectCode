@@ -45,14 +45,6 @@ cells = double(cells.data);
 
 %%%% SEGMENTATION OF CELLS
 
-if deconv == True
-    loadpsf = tiffread2(psfpath);
-    for i=1:length(loadpsf)
-        psf(:,:,i) = double(loadpsf(i).data);
-    end
-    cells = DL2.RL(cells, psf, 20);
-end
-
 
 % use the function "b_fill_water.m" to binarize the cells
 binary_cells = b_fill_water(cells);
