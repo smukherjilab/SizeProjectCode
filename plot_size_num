@@ -1,0 +1,46 @@
+% function to plot average intracellular size as a function of intracellular number.
+
+% INPUT: 2D array 'volumes' where each row is a cell, and each entry is an organelle
+% OUTPUT: int 'maxOrgs' - highest N found in input population
+%         cell array 'meanSizesByN' - a (maxOrgs x 1) dimensional cell array where each cell i represents 
+%                                     cells with i organelles, and each entry of that cell is an average intracellular size
+%         cell array 'cvByN' - a (maxOrgs x 1) dimensional cell array where each cell i represents
+%                              cells with i organelles, and each entry of that cell is an intracellular CV
+%         (where CV = std(organelle sizes)/mean(organelle sizes) for an individual cell)
+% 
+
+function [maxOrgs, meanSizesByN, cvByN] = size_cv(volumes)
+
+    % get max orgs of population
+    maxOrgs = 0;
+    for i=1:size(volumes,1)
+        thisCell = volumes(i,:);            % grab cell
+        thisCell = thisCell(thisCell>0);        % filter out 0s/NaNs
+        if length(thisCell) > maxOrgs
+            maxOrgs = length(thisCell);
+        end
+    end
+
+    % bin the avg intracellular sizes by number 
+    meanSizesByN = cell(maxOrgs,1);
+    cvByN = cell(maxOrgs,1);
+    for i=1:size(volumes,1)
+        thisCell = volumes(i,:);     
+        thisCell = thisCell(thisCell > 0);        
+        thisN = length(thisCell);
+        
+        if thisN < 1            % if row is empty, skip
+            continue
+        end
+        meanSizesByN{thisN} = [meanSizesByN{thisN} mean(thisCell)];
+        cvByN{thisN} = [cvByN{thisN} std(thisCell)/mean(thisCell)];
+    end
+    
+    figure(); title('Avg Intracellular Size vs. Avg Intracellular CV, binned by N')
+    xlabel('Avg Intracellular Size')
+    ylabel('Avg Intracellular CV')
+    hold on;
+    for i=1:maxOrgs
+        scatter(mean(meanSizesByN{i}), mean(cvByN{i}), 50, 'filled', 'red');
+    end
+end
