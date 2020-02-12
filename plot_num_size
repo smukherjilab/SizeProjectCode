@@ -1,3 +1,9 @@
+% function to plot average intracellular size as a function of intracellular number.
+
+% INPUT: 2D array 'volumes' where each row is a cell, and each entry is an organelle
+% OUTPUT: int 'maxOrgs' - highest N found in input population
+%         cell array 'meanSizesByN' - a (maxOrgs x 1) dimensional cell array where each cell i represents 
+%                                     cells with i organelles, and each entry of that cell is an average intracellular size
 
 
 
