@@ -1,4 +1,4 @@
-% function to plot average intracellular size as a function of intracellular number.
+% function to plot average intracellular CV as a function of average intracellular size, binned by N.
 
 % INPUT: 2D array 'volumes' where each row is a cell, and each entry is an organelle
 % OUTPUT: int 'maxOrgs' - highest N found in input population
