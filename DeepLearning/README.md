@@ -11,7 +11,7 @@ After training, I download the model parameters and perform inference on new dat
 
 You can try out a pretrained model by downloading the files of (or cloning into) the repo here. 
 
-You'll need the following files: _Dataclass.py_, _Model.py_, _Slice.py_, _Stack.py_, _mito_inference.py_
+You'll need the following files: _dataclass.py_, _model.py_, _slice.py_, _stack.py_, _mito_inference.py_
 
 I setup the files so that you can perform inference with the pretrained model from the command line, with just 1 line of code:
 
