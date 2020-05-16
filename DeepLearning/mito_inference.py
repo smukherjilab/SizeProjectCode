@@ -9,7 +9,7 @@ import json
 import sys
 from torch.utils.data import DataLoader
 from ast import literal_eval
-from Model import MyModel
+from model import MyModel
 from dataclass import FormsDataset
 from stack import ZStack
 from slice import Slice
