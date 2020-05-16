@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-from Slice import Slice
+from slice import Slice
 # i wrote this class to address frustrations while processing data for deep learning
 # before, i would:
 # load 3D tiff into imagej -> split each z into 64 tiles, 1 z at a time
