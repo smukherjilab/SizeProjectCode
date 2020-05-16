@@ -1,4 +1,8 @@
-Here's the code I've been using for U-Net related things. Passing your fluorescent images through the U-Net is meant to replace deconvolution as a preprocessing step. Replacing the deconvolution with the U-Net may speed up preprocessing and greatly enhance image quality. Deconvolving an entire stack can take hours; passing a 31z stack through the U-Net should take less than a minute, and usually clean up the image more effectively & intelligently.
+## Purpose:
+The U-Net is meant to replace deconvolution as a preprocessing step. 
+
+
+Replacing the deconvolution with the U-Net may speed up preprocessing and greatly enhance image quality. Deconvolving an entire stack can take hours; passing a 31z stack through the U-Net should take less than a minute, and usually clean up the image more effectively & intelligently.
 
 I train the U-Net using the notebooks in 'Google Colab Notebooks'. Google Colab gives free access to GPUs, which is very nice.
 After training, I download the model parameters and perform inference on new data, locally on my machine (this step shouldn't require a GPU, as the training does). I've been using the popular IDE PyCharm.
