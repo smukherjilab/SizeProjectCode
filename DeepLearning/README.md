@@ -1,5 +1,5 @@
 ### Purpose:
-The U-Net is meant to replace deconvolution as a preprocessing step. 
+This U-Net is meant to replace deconvolution as a preprocessing step. 
 
 Replacing the deconvolution with the U-Net may speed up preprocessing and greatly enhance image quality. Deconvolving an entire stack can take hours; passing a 31z stack through the U-Net should take less than a minute, and usually clean up the image more effectively & intelligently.
 
