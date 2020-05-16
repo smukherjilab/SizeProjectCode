@@ -24,4 +24,6 @@ __Pretrained models can be found in 'pretrained models'__
 
 __An example JSON can be found in 'inference arguments'__
 
-_Note: JSON's are basically just txt files; to create one, first create a txt file and then save with extension '.json'_
+_Notes:_ 
+  * _JSON's are basically just txt files; to create one, first create a txt file and then save with extension '.json'_
+  * _Models are trained with a particular structure in mind. e.g. 'mito_inference.py' or 'unet_mito.pynb' are meant only to be used with mitochondria. There's nothing stopping you from applying the model to the wrong structure; your results are just unlikely to be good_
