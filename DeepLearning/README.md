@@ -21,6 +21,7 @@ python mito_inference.py path_to_json.json
 where 'path_to_json.json' is a JSON file holding the parameters (e.g. paths to your images, range of z slices you want to process, etc)
 
 __Pretrained models can be found in 'pretrained models'__
+
 __An example JSON can be found in 'inference arguments'__
 
 _Note: JSON's are basically just txt files; to create one, first create a txt file and then save with extension '.json'_
