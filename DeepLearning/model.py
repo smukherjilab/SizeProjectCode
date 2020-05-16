@@ -1,6 +1,8 @@
-
+# Construct and define the Model (as its own class) 
+# Model borrowed from Allen Institute: https://github.com/AllenCellModeling/pytorch_fnet
 import torch
 
+# Define a sub-network for recursive construction of U-Net
 class SubNet2Conv(torch.nn.Module):
     def __init__(self, n_in, n_out):
         super().__init__()
@@ -20,7 +22,7 @@ class SubNet2Conv(torch.nn.Module):
         x = self.relu2(x)
         return x
 
-
+# build full model
 class MyModel(torch.nn.Module):
     def __init__(self, n_in_channels, mult_chan=2, depth=1):
         super().__init__()
