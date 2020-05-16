@@ -1,24 +1,22 @@
+# A class I defined to help simplify my code. 
+# 1 Zstack object holds 1 tiff stack. 
+
 import numpy as np
 from PIL import Image
 from slice import Slice
-# i wrote this class to address frustrations while processing data for deep learning
-# before, i would:
-# load 3D tiff into imagej -> split each z into 64 tiles, 1 z at a time
-# -> save the tiles on my desktop -> read into pycharm -> perform inference
-# -> save tiles to desktop
 
-# this class will hopefully facilitate bringing all of those processes into 1 script in python
-# and eventually, should make it easier to work with multiple zstacks at a time
-# (whilst not losing my intuition with the code)
-
-# just remember 0-indexing!
+# remember 0-indexing!
 
 class ZStack(object):
-    def __init__(self, path, zrange=(0,30)):
-
+    
+    # INPUTS: 
+    #        path -- path to the tiff stack (or 2D)
+    #        zrange -- z-slices that you want to process. If tiff is 2d, write (0,0)
+    
+    def __init__(self, path, zrange=(1,31)):
         self.path = path
         self.zrange = zrange
-
+        
         data = Image.open(path)
         ims = []
         for i in range(zrange[0]-1, zrange[1]):   # -1 to adjust for zero-indexing
@@ -49,8 +47,3 @@ class ZStack(object):
     # length of ZStack is its depth (ie, # of images)
     def __len__(self):
         return self.depth
-
-    # method to write ZStack to 3D tiff
-    # def save(self):
-
-
