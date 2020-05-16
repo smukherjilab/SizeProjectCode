@@ -10,9 +10,9 @@ import sys
 from torch.utils.data import DataLoader
 from ast import literal_eval
 from Model import MyModel
-from Dataclass import FormsDataset
-from Stack import ZStack
-from Slice import Slice
+from dataclass import FormsDataset
+from stack import ZStack
+from slice import Slice
 
 start_time = time.time()
 
