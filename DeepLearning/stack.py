@@ -1,5 +1,5 @@
 # A class I defined to help simplify my code. 
-# 1 Zstack object holds 1 tiff stack. 
+# 1 ZStack object holds 1 tiff stack. 
 
 import numpy as np
 from PIL import Image
