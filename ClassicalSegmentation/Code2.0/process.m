@@ -102,7 +102,7 @@ MIN_ORG_SIZE, 'max_org_size', 500);
 
 %% 
 function data = process(PATH_ORGS, PATH_CELLS, Z,...
-    THRESHOLD, SIGMA, CC, MIN_ORG_SIZE, varargin)
+    THRESHOLD, SIGMA, CC, MIN_ORG_SIZE, STREL_SIZE, varargin)
     
     %% first check optional arguments
     p = inputParser;
@@ -198,9 +198,10 @@ function data = process(PATH_ORGS, PATH_CELLS, Z,...
     seg_edge_orgs = cell([NUM_CELLS,1]);       % filtered organelles, segmented
     centroids = cell([NUM_CELLS, 1]);          % centroids of organelles
     conncomp = cell([NUM_CELLS, 1]);           % connected components (clustering for size/# measurements)
+    throw_away = {};
     for c=1:NUM_CELLS    % iter thru cells
 
-        if isnan(cell_sizes(c))  
+        if isnan(cell_sizes(c)) || cell_sizes(c) == 0
             org_volumes{c,1} = NaN;
         else
             for z=Z(1):Z(2)    % iter thru Z's of this cell
@@ -208,12 +209,18 @@ function data = process(PATH_ORGS, PATH_CELLS, Z,...
                 these_orgs = orgs(cell_coords{c}(2,1):cell_coords{c}(2,2),...
                     cell_coords{c}(1,1):cell_coords{c}(1,2),z);
                 % blur the organelles so pixel dist is less jumpy:
-                these_orgs_filt = imgaussfilt(these_orgs, SIGMA);
+%                 these_orgs_filt = imgaussfilt(these_orgs, SIGMA);
                 % apply edge detection: 
-                these_orgs_edge = laplace(these_orgs_filt);
+%                 these_orgs_edge = laplace(these_orgs_filt);
                 % binarize organelles:
-                these_orgs_bw = these_orgs_edge > THRESHOLD;
-                
+                tof2 = imtophat(medfilt2(these_orgs),strel('square',STREL_SIZE));
+                these_orgs_bw = tof2 > mean(tof2(tof2>0))+THRESHOLD*std(tof2(tof2>0)); 
+%                 these_orgs_bw = these_orgs_edge > THRESHOLD;
+%                 ratio = sum(these_orgs_bw(:))/numel(these_orgs_bw);
+%                 if ratio > 0.15
+%                     throw_away{end+1} = these_orgs_bw;
+%                     these_orgs_bw = zeros(size(these_orgs_bw));
+%                 end
                 % stich together the binary field of organelles
                 orgs_bw(cell_coords{c}(2,1):cell_coords{c}(2,2),...
                     cell_coords{c}(1,1):cell_coords{c}(1,2),z-Z(1)+1)...
@@ -221,7 +228,7 @@ function data = process(PATH_ORGS, PATH_CELLS, Z,...
                 % stitch together the filtered field of organelles
                 orgs_edge(cell_coords{c}(2,1):cell_coords{c}(2,2),...
                     cell_coords{c}(1,1):cell_coords{c}(1,2),z-Z(1)+1)...
-                    = these_orgs_edge;
+                    = tof2;%these_orgs_edge;
             end
            
             % cluster the pixels - ie, label organelles for size/#
@@ -289,6 +296,7 @@ function data = process(PATH_ORGS, PATH_CELLS, Z,...
     data.org_volumes = org_volumes;
     data.centroids = centroids;
     data.conncomp = conncomp;
+    data.throw_away = throw_away;
 
 end
 

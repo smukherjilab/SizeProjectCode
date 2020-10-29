@@ -7,9 +7,7 @@ function [] = check_images(seg_raw_orgs, seg_binary_orgs,sample_size)
 
     samples = randi(length(seg_raw_orgs),[sample_size, 1]); % choose samples
     
-    
-    
-    
+%     figure();
     
     for i=1:sample_size
         figure('Name', ['Cell ' num2str(samples(i))]);

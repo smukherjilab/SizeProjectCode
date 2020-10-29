@@ -66,9 +66,9 @@ data_dist: a struct that holds all of the datasets & the
 
 %%
 function data_dist = sweep_process(T_range, S_range, MIN_ORG_SIZE_range,...
-    PATH_ORGS, PATH_CELLS, Z, CC, varargin)
+    PATH_ORGS, PATH_CELLS, Z, CC, STREL_SIZE, varargin)
     
-    num_iters = length(T_range)*length(S_range)*length(MIN_ORG_SIZE_range);
+    num_iters = length(T_range)*length(S_range)*length(MIN_ORG_SIZE_range)*length(STREL_SIZE);
     
     data_dist.data = cell([num_iters, 1]);
    
@@ -85,17 +85,18 @@ function data_dist = sweep_process(T_range, S_range, MIN_ORG_SIZE_range,...
     for T=1:length(T_range)
         for S=1:length(S_range)
             for M=1:length(MIN_ORG_SIZE_range)
-                
-                n = n + 1;
-                this_data_set = process(PATH_ORGS,PATH_CELLS,... 
-                    Z, T_range(T), S_range(S), CC, MIN_ORG_SIZE_range(M),varargin);
-                
-                this_data_set.T = T_range(T);
-                this_data_set.S = S_range(S);
-                this_data_set.M = MIN_ORG_SIZE_range(M);
-                
-                data_dist.data{n} = this_data_set;
-                disp(['Iter ' num2str(n) ' of ' num2str(num_iters)])
+                for SE=1:length(STREL_SIZE)
+                    n = n + 1;
+                    this_data_set = process(PATH_ORGS,PATH_CELLS,... 
+                        Z, T_range(T), S_range(S), CC, MIN_ORG_SIZE_range(M),STREL_SIZE(SE),varargin);
+
+                    this_data_set.T = T_range(T);
+                    this_data_set.S = S_range(S);
+                    this_data_set.M = MIN_ORG_SIZE_range(M);
+                    this_data_set.SE = STREL_SIZE(SE);
+                    data_dist.data{n} = this_data_set;
+                    disp(['Iter ' num2str(n) ' of ' num2str(num_iters)])
+                end
             end
         end
     end
