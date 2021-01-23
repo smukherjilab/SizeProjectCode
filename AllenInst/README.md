@@ -8,9 +8,11 @@ After following AllenCell's directions to install their tools, this is the pipel
 
 *assumes that input is a single-channel Zstack of organelles*
 
-0. Deconvolve your images (may skip this step if you want to work directly with raw fluorescence and/or you didn't use the camera)
+##### 0. 
+Deconvolve your images (may skip this step if you want to work directly with raw fluorescence and/or you didn't use the camera)
 
-1. In ImageJ, run *stack_prep.ijm* to chunk Zstack into smaller blocks
+##### 1.
+In ImageJ, run *stack_prep.ijm* to chunk Zstack into smaller blocks
    *default splits a 2044x2048x31 stack into 64 blocks of 256x256x31. This can be changed by adjusting param n inside code*
    
 2. In your terminal: 
