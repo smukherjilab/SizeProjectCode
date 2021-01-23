@@ -34,6 +34,7 @@ In your terminal:
 ##### 3
 Finally, stitch the processed blocks together to construct a binary Zstack. 
   I do this in ImageJ: 
+  
   *Plugins -> Stitching -> Grid/Collection stitching* with params *Type*=Filename defined position & *Order*=Defined by filename
   
 
