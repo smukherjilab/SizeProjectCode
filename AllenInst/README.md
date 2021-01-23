@@ -1,4 +1,4 @@
-# SizeProjectCode
+## AllenCell pipelines
 
 In this folder, I have saved all of the pipelines built on AllenCell's segmentation work.
 
