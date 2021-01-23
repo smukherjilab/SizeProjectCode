@@ -5,6 +5,7 @@ In this folder, I have saved all of the pipelines built on AllenCell's segmentat
 Each organelle & imaging condition has its own pipeline. First, check out AllenCell's [Github](https://github.com/AllenCell/aics-segmentation) to download the necessary tools (very user-friendly). The code and a ML-based extension is outlined in this [paper](https://www.biorxiv.org/content/10.1101/491035v2). 
 
 After following AllenCell's directions to install their tools, this is the pipeline I use: 
+
 *assumes that input is a single-channel Zstack of organelles*
 
 0. Deconvolve your images (may skip this step if you want to work directly with raw fluorescence and/or you didn't use the camera)
