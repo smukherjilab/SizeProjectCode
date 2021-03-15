@@ -1,6 +1,6 @@
-# image-processing
-Image processing functions and scripts I've written for a biophysics lab @MukherjiLab
+# bayesian processing
 
-For code I originally used during the project check out SizeControlProjectCode
+I've been writing the code in `bayesian_objdet_4.m` (yes there are 3 others)
+which calls `place_gaussian.m`
 
-For newer code (mostly written during rebuttal) check out ProcessingWorkflow. I named it that because it should be a self-contained archive of all the code I use to go from (deconvolved) raw image data to organelle statistics. 
+`mcmc_practice` contain some of my failed attempts at using MCMC to sample posterior
