@@ -29,11 +29,12 @@ for i=1:2
     data(i) = data(i).loadAuxImage();
 end
 toc
- %% params 
+
+%% params 
 
 SIGMA = 1;
-STREL = 3;
 THRESHOLD = 0.09;
+
 MINSIZE = 100; MAXSIZE = 2000;
 MININT = 100;
 MINCELLSIZE = 1000;
